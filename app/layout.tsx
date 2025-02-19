@@ -4,8 +4,11 @@ import {
   MantineProvider,
   ColorSchemeScript,
   mantineHtmlProps,
+  Container,
 } from "@mantine/core";
-import { theme } from "../theme";
+import { shadcnTheme } from "../theme";
+import "../style.css";
+import { GeistSans } from "geist/font/sans";
 
 export const metadata = {
   title: "Taskium",
@@ -23,8 +26,25 @@ export default function RootLayout({ children }: { children: any }) {
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
         />
       </head>
-      <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+      <body className={GeistSans.className}>
+        <MantineProvider theme={shadcnTheme}>
+          <Container
+            mih="100vh"
+            style={{ display: "flex", flexDirection: "column" }}
+            p="0"
+            fluid
+          >
+            <p>Navbar</p>
+            <Container
+              size="xl"
+              style={{ flex: 1, display: "flex", flexDirection: "column" }}
+              w="100%"
+            >
+              {children}
+            </Container>
+            <p>Footer</p>
+          </Container>
+        </MantineProvider>
       </body>
     </html>
   );
