@@ -1,4 +1,7 @@
 import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+import "@/style.css";
+
 import React from "react";
 import {
   MantineProvider,
@@ -6,9 +9,11 @@ import {
   mantineHtmlProps,
   Container,
 } from "@mantine/core";
-import { shadcnTheme } from "../theme";
-import "../style.css";
+import { shadcnTheme } from "@/theme";
+import { shadcnCssVariableResolver } from "@/cssVariableResolver";
 import { GeistSans } from "geist/font/sans";
+
+import { Notifications } from "@mantine/notifications";
 
 export const metadata = {
   title: "Taskium",
@@ -27,23 +32,12 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body className={GeistSans.className}>
-        <MantineProvider theme={shadcnTheme}>
-          <Container
-            mih="100vh"
-            style={{ display: "flex", flexDirection: "column" }}
-            p="0"
-            fluid
-          >
-            <p>Navbar</p>
-            <Container
-              size="xl"
-              style={{ flex: 1, display: "flex", flexDirection: "column" }}
-              w="100%"
-            >
-              {children}
-            </Container>
-            <p>Footer</p>
-          </Container>
+        <MantineProvider
+          theme={shadcnTheme}
+          cssVariablesResolver={shadcnCssVariableResolver}
+        >
+          {children}
+          <Notifications />
         </MantineProvider>
       </body>
     </html>

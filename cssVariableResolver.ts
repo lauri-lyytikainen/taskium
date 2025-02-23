@@ -1,3 +1,5 @@
+"use client";
+
 import { alpha, CSSVariablesResolver } from "@mantine/core";
 
 export const shadcnCssVariableResolver: CSSVariablesResolver = () => ({

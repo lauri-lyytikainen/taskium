@@ -1,4 +1,4 @@
-import { Stack, Button, Group, Title, Text } from "@mantine/core";
+import { Stack, Button, Group, Title } from "@mantine/core";
 import {
   IconCalendarWeek,
   IconBolt,
@@ -34,9 +34,9 @@ function NavButton(
   );
 }
 
-export function NavBar({ setPageFunction, currentPage }: NavBarProps) {
+export function Navbar({ setPageFunction, currentPage }: NavBarProps) {
   return (
-    <Stack gap="xs">
+    <Stack gap="xs" mt="md">
       <Title order={3}>Your workspace</Title>
       {NavButton(
         "Today",

@@ -1,13 +1,5 @@
-import {
-  Table,
-  TableThead,
-  TableTr,
-  TableTh,
-  TableTd,
-  TableTbody,
-  Title,
-} from "@mantine/core";
-import { Task } from "../../Task/Task";
+import { Title } from "@mantine/core";
+import { Task } from "../Task/Task";
 
 export function TodayView() {
   return (

@@ -11,9 +11,5 @@ import {
 import Link from "next/link";
 
 export default function Page() {
-  return (
-    <Link href="/dashboard">
-      <Button>Go to dashboard</Button>
-    </Link>
-  );
+  return;
 }
