@@ -1,14 +1,26 @@
 "use client";
-import { AppShell, Group, Title, ActionIcon } from "@mantine/core";
+import {
+  AppShell,
+  Group,
+  Title,
+  ActionIcon,
+  Button,
+  Modal,
+  Stack,
+  Textarea,
+} from "@mantine/core";
 import { IconLayoutSidebar, IconMessage } from "@tabler/icons-react";
 import { useState } from "react";
 
 import { AiChat } from "@/components/dashboard/AiChat/AiChat";
 import { useDisclosure } from "@mantine/hooks";
 import { Navbar } from "@/components/dashboard/Navbar/Navbar";
-import { TodayView } from "@/components/dashboard/TodayView/TodayView";
+import { TaskView } from "@/components/dashboard/TodayView/TaskView";
 import { UserButton } from "@/components/website/Navbar/UserButton";
 import { User } from "@supabase/supabase-js";
+
+import { CreateTaskButton } from "./Task/CreateTaskButton";
+import { useTodos } from "@/utils/todos/todos";
 
 interface DashboardProps {
   user: User;
@@ -17,10 +29,12 @@ interface DashboardProps {
 
 export function Dashboard({ user, signOutFunction }: DashboardProps) {
   const [navbarOpen, { toggle: toggleNavbar }] = useDisclosure();
-  const [chatOpen, { toggle: toggleChat }] = useDisclosure();
+  const [chatOpen, { toggle: toggleChat }] = useDisclosure(true);
+  const { addTodo, todos, loading, error, toggleCompleted } = useTodos();
+
   const [currentPage, setCurrentPage] = useState<
-    "today" | "scheduled" | "completed"
-  >("today");
+    "tasks" | "calendar" | "completed"
+  >("tasks");
 
   return (
     <AppShell
@@ -47,9 +61,12 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
             <Title order={3}>Taskium</Title>
           </Group>
 
-          <ActionIcon variant="subtle" onClick={toggleChat} mx="md">
-            <IconMessage />
-          </ActionIcon>
+          <Group>
+            <CreateTaskButton addTodo={addTodo} />
+            <ActionIcon variant="subtle" onClick={toggleChat} mx="md">
+              <IconMessage />
+            </ActionIcon>
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="lg">
@@ -59,8 +76,15 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
       <AppShell.Main>
         {
           {
-            today: <TodayView />,
-            scheduled: <p>Scheduled</p>,
+            tasks: (
+              <TaskView
+                todos={todos}
+                loading={loading}
+                error={error}
+                toggleCompleted={toggleCompleted}
+              />
+            ),
+            calendar: <p>Calendar</p>,
             completed: <p>Completed</p>,
           }[currentPage]
         }

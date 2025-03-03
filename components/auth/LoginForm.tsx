@@ -15,7 +15,7 @@ import { AuthCard } from "./AuthCard";
 import Image from "next/image";
 import {
   IconBrandGoogle,
-  IconBrandGithub,
+  IconBrandNotion,
   IconMail,
   IconPassword,
 } from "@tabler/icons-react";
@@ -89,9 +89,9 @@ export function LoginForm() {
           <Button
             flex={1}
             variant="default"
-            leftSection={<IconBrandGithub size={20} />}
+            leftSection={<IconBrandNotion size={20} />}
           >
-            Github
+            Notion
           </Button>
         </Group>
         <Divider label="or continue with email" />

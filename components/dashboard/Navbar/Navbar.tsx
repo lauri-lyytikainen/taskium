@@ -8,9 +8,9 @@ import Link from "next/link";
 
 interface NavBarProps {
   setPageFunction: React.Dispatch<
-    React.SetStateAction<"today" | "scheduled" | "completed">
+    React.SetStateAction<"tasks" | "calendar" | "completed">
   >;
-  currentPage: "today" | "scheduled" | "completed";
+  currentPage: "tasks" | "calendar" | "completed";
 }
 
 function NavButton(
@@ -39,16 +39,16 @@ export function Navbar({ setPageFunction, currentPage }: NavBarProps) {
     <Stack gap="xs" mt="md">
       <Title order={3}>Your workspace</Title>
       {NavButton(
-        "Today",
+        "Tasks",
         <IconBolt size="20" />,
-        () => setPageFunction("today"),
-        currentPage === "today"
+        () => setPageFunction("tasks"),
+        currentPage === "tasks"
       )}
       {NavButton(
-        "Scheduled",
+        "Calendar",
         <IconCalendarWeek size="20" />,
-        () => setPageFunction("scheduled"),
-        currentPage === "scheduled"
+        () => setPageFunction("calendar"),
+        currentPage === "calendar"
       )}
       {NavButton(
         "Completed",
