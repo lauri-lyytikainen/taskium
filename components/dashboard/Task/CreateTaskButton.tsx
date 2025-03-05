@@ -15,6 +15,7 @@ import {
   Group,
   Select,
   Switch,
+  Loader,
 } from "@mantine/core"
 import { useState } from "react"
 import { useDebouncedCallback } from "@mantine/hooks"
@@ -39,7 +40,6 @@ export function CreateTaskButton({
     error: "",
   })
   const handleSearch = useDebouncedCallback(async (query: string) => {
-    setLoading(true)
     setTaskPreview(await parseTextToTask(query))
     setLoading(false)
   }, 500)
@@ -55,6 +55,7 @@ export function CreateTaskButton({
       taskName: e.currentTarget.value,
     })
     if (useAi) {
+      setLoading(true)
       handleSearch(e.currentTarget.value)
     }
   }
@@ -63,7 +64,7 @@ export function CreateTaskButton({
     <>
       <Modal opened={taskModalOpen} onClose={close} title="Add new task">
         <Stack>
-          <Group flex={1}>
+          <Stack>
             <Textarea
               placeholder="Task description"
               label="Task"
@@ -71,7 +72,6 @@ export function CreateTaskButton({
               autosize
               onChange={(e) => handleChange(e)}
               error={taskPreview.error != "none" ? taskPreview.error : null}
-              flex={1}
               rightSection={
                 <Switch
                   label="Use AI"
@@ -84,7 +84,19 @@ export function CreateTaskButton({
               }
               rightSectionWidth={120}
             />
-          </Group>
+            {useAi && (
+              <>
+                <Text size="xs" fw="700">
+                  Smart task preview:
+                </Text>
+                {loading ? (
+                  <Loader size="xs" />
+                ) : (
+                  <Text>{taskPreview.taskName}</Text>
+                )}
+              </>
+            )}
+          </Stack>
           <Group flex={1}>
             <DateInput
               value={taskPreview.dueDate}

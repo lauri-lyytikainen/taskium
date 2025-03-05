@@ -30,7 +30,6 @@ export function CodeAuth() {
         "Invalid password reset link, the link might have expired"
       )
     } else {
-      console.log("Code: ", code)
       codeLogin(code).then((response) => {
         if (isMounted) {
           if (response.error) {
