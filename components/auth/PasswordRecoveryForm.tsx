@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 import {
   Button,
   Center,
@@ -10,17 +10,17 @@ import {
   Stack,
   LoadingOverlay,
   Box,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { errorNotification } from "@/utils/notifications/notifications";
-import { recover } from "@/utils/supabase/authAction";
-import { AuthCard } from "./AuthCard";
-import Image from "next/image";
-import { IconMail } from "@tabler/icons-react";
+} from "@mantine/core"
+import { useForm } from "@mantine/form"
+import { errorNotification } from "@/utils/notifications/notifications"
+import { recover } from "@/utils/supabase/authAction"
+import { AuthCard } from "./AuthCard"
+import Image from "next/image"
+import { IconMail } from "@tabler/icons-react"
 
 export function PasswordRecoveryForm() {
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     mode: "uncontrolled",
     onSubmitPreventDefault: "always",
@@ -32,19 +32,19 @@ export function PasswordRecoveryForm() {
       email: (value) =>
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? null : "Invalid email",
     },
-  });
+  })
 
   function submitForm(values: { email: string }) {
-    setIsLoading(true);
+    setIsLoading(true)
     recover(values.email).then((response) => {
       if (response.error) {
-        errorNotification(response.error.message);
-        setIsLoading(false);
-        return;
+        errorNotification(response.error.message)
+        setIsLoading(false)
+        return
       }
-      setEmail(values.email);
-      setIsLoading(false);
-    });
+      setEmail(values.email)
+      setIsLoading(false)
+    })
   }
 
   return (
@@ -112,5 +112,5 @@ export function PasswordRecoveryForm() {
         </Stack>
       )}
     </AuthCard>
-  );
+  )
 }

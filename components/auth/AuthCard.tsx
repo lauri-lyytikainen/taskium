@@ -1,7 +1,7 @@
-import { Box, Card, Group, Title } from "@mantine/core";
-import { IconChevronLeft } from "@tabler/icons-react";
-import Link from "next/link";
-import Image from "next/image";
+import { Box, Card, Group, Title } from "@mantine/core"
+import { IconChevronLeft } from "@tabler/icons-react"
+import Link from "next/link"
+import Image from "next/image"
 
 export function AuthCard({ children }: { children: any }) {
   return (
@@ -34,5 +34,5 @@ export function AuthCard({ children }: { children: any }) {
         </Box>
       </Card>
     </Box>
-  );
+  )
 }

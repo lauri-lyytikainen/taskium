@@ -8,7 +8,7 @@ import {
   Group,
   Textarea,
   Button,
-} from "@mantine/core";
+} from "@mantine/core"
 
 const log = [
   {
@@ -28,7 +28,7 @@ const log = [
     type: "user",
     message: "Short one",
   },
-];
+]
 
 function aiMessage(message: string, index: number) {
   return (
@@ -42,7 +42,7 @@ function aiMessage(message: string, index: number) {
     >
       <Text c="var(--mantine-primary-color-text">{message}</Text>
     </Paper>
-  );
+  )
 }
 function userMessage(message: string, index: number) {
   return (
@@ -56,7 +56,7 @@ function userMessage(message: string, index: number) {
     >
       <Text c="var(--mantine-primary-color-contrast">{message}</Text>
     </Paper>
-  );
+  )
 }
 
 export function AiChat() {
@@ -77,5 +77,5 @@ export function AiChat() {
         <Button>Send</Button>
       </Group>
     </Stack>
-  );
+  )
 }

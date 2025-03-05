@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Button,
@@ -9,7 +9,7 @@ import {
   MenuTarget,
   MenuDropdown,
   MenuLabel,
-} from "@mantine/core";
+} from "@mantine/core"
 import {
   IconChevronDown,
   IconUser,
@@ -17,18 +17,18 @@ import {
   IconLogout,
   IconHome,
   IconLayoutDashboard,
-} from "@tabler/icons-react";
-import { User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
+} from "@tabler/icons-react"
+import { User } from "@supabase/supabase-js"
+import { useRouter } from "next/navigation"
 
 interface UserButtonProps {
-  user: User;
-  signOutFunction: () => void;
+  user: User
+  signOutFunction: () => void
 }
 
 export function UserButton({ user, signOutFunction }: UserButtonProps) {
-  const name = user.user_metadata.name || user.email;
-  const router = useRouter();
+  const name = user.user_metadata.name || user.email
+  const router = useRouter()
 
   return (
     <Menu width={200} position="bottom-end">
@@ -39,7 +39,11 @@ export function UserButton({ user, signOutFunction }: UserButtonProps) {
           rightSection={<IconChevronDown size={20} />}
         >
           <Group>
-            <Avatar name={name} size={"sm"} />
+            <Avatar
+              name={name}
+              size={"sm"}
+              src={user.user_metadata.avatar_url || ""}
+            />
             {name}
           </Group>
         </Button>
@@ -59,8 +63,12 @@ export function UserButton({ user, signOutFunction }: UserButtonProps) {
           Dashboard page
         </MenuItem>
         <MenuLabel>Options</MenuLabel>
-        <MenuItem leftSection={<IconUser size={20} />}>Account</MenuItem>
-        <MenuItem leftSection={<IconSettings size={20} />}>Settings</MenuItem>
+        <MenuItem leftSection={<IconUser size={20} />} disabled>
+          Account
+        </MenuItem>
+        <MenuItem leftSection={<IconSettings size={20} />} disabled>
+          Settings
+        </MenuItem>
         <MenuItem
           leftSection={<IconLogout size={20} />}
           color="red"
@@ -70,5 +78,5 @@ export function UserButton({ user, signOutFunction }: UserButtonProps) {
         </MenuItem>
       </MenuDropdown>
     </Menu>
-  );
+  )
 }

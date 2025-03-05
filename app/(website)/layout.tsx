@@ -1,5 +1,5 @@
-import { Container } from "@mantine/core";
-import { Navbar } from "@/components/website/Navbar/Navbar";
+import { Container } from "@mantine/core"
+import { Navbar } from "@/components/website/Navbar/Navbar"
 
 export default function PageLayout({ children }: { children: any }) {
   return (
@@ -19,5 +19,5 @@ export default function PageLayout({ children }: { children: any }) {
       </Container>
       <p>Footer</p>
     </Container>
-  );
+  )
 }

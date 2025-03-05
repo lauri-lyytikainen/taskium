@@ -1,7 +1,7 @@
-"use client";
-import { useDisclosure } from "@mantine/hooks";
-import { IconPlus } from "@tabler/icons-react";
-import { parseTextToTask } from "@/utils/llm/llm";
+"use client"
+import { useDisclosure } from "@mantine/hooks"
+import { IconPlus } from "@tabler/icons-react"
+import { parseTextToTask } from "@/utils/llm/llm"
 import {
   Button,
   Card,
@@ -10,102 +10,135 @@ import {
   Textarea,
   Text,
   Pill,
-  Group,
   LoadingOverlay,
-} from "@mantine/core";
-import { useState } from "react";
-import { useDebouncedCallback } from "@mantine/hooks";
-import { TaskPreview } from "@/types/types";
-import {
-  getFormattedDateToday,
-  getFormattedDayStringWithString,
-} from "@/utils/time/time";
+  TextInput,
+  Group,
+  Select,
+  Switch,
+} from "@mantine/core"
+import { useState } from "react"
+import { useDebouncedCallback } from "@mantine/hooks"
+import { TaskPreview } from "@/types/types"
+import { getFormattedDateToday, getFormattedDayString } from "@/utils/time/time"
+import { DateInput, TimeInput } from "@mantine/dates"
 
 export function CreateTaskButton({
   addTodo,
 }: {
-  addTodo: (task: TaskPreview) => void;
+  addTodo: (task: TaskPreview) => void
 }) {
-  const [taskModalOpen, { open, close }] = useDisclosure(false);
-  const [loading, setLoading] = useState(false);
-  const [currentDate] = useState(getFormattedDateToday());
+  const [taskModalOpen, { open, close }] = useDisclosure(false)
+  const [loading, setLoading] = useState(false)
+  const [useAi, setUseAi] = useState(false)
+  const [currentDate] = useState(getFormattedDateToday())
   const [taskPreview, setTaskPreview] = useState<TaskPreview>({
     taskName: "",
-    dueDate: "",
-    dueTime: "",
+    dueDate: null,
+    dueTime: null,
     priority: 0,
-    error: "none",
-  });
+    error: "",
+  })
   const handleSearch = useDebouncedCallback(async (query: string) => {
-    setLoading(true);
-    setTaskPreview(await parseTextToTask(query));
-    setLoading(false);
-  }, 500);
+    setLoading(true)
+    setTaskPreview(await parseTextToTask(query))
+    setLoading(false)
+  }, 500)
 
   function addTask() {
-    addTodo(taskPreview);
-    close();
+    addTodo(taskPreview)
+    close()
+  }
+
+  function handleChange(e: any) {
+    setTaskPreview({
+      ...taskPreview,
+      taskName: e.currentTarget.value,
+    })
+    if (useAi) {
+      handleSearch(e.currentTarget.value)
+    }
   }
 
   return (
     <>
       <Modal opened={taskModalOpen} onClose={close} title="Add new task">
         <Stack>
-          <Textarea
-            placeholder="Task description"
-            label="Task"
-            description="Describe your task"
-            autosize
-            onChange={(e) => handleSearch(e.currentTarget.value)}
-            error={taskPreview.error != "none" ? taskPreview.error : null}
-          />
-          <Card shadow="0">
-            <LoadingOverlay visible={loading} />
-            <Stack>
-              <Text>
-                {taskPreview.taskName
-                  ? taskPreview.taskName
-                  : "Start typing to see a preview"}
-              </Text>
-              <Text>
-                Due to{" "}
-                <Pill
-                  bg="var(--mantine-primary-color-filled)"
-                  c="var(--mantine-primary-color-contrast)"
-                  size="md"
-                >
-                  {taskPreview.dueDate
-                    ? getFormattedDayStringWithString(taskPreview.dueDate)
-                    : "No date"}
-                </Pill>
-                {taskPreview.dueTime && (
-                  <>
-                    {" at "}
-                    <Pill
-                      bg="var(--mantine-primary-color-filled)"
-                      c="var(--mantine-primary-color-contrast)"
-                      size="md"
-                    >
-                      {taskPreview.dueTime}
-                    </Pill>
-                  </>
-                )}
-              </Text>
+          <Group flex={1}>
+            <Textarea
+              placeholder="Task description"
+              label="Task"
+              description="Describe your task"
+              autosize
+              onChange={(e) => handleChange(e)}
+              error={taskPreview.error != "none" ? taskPreview.error : null}
+              flex={1}
+              rightSection={
+                <Switch
+                  label="Use AI"
+                  labelPosition="left"
+                  checked={useAi}
+                  onChange={(e) => {
+                    setUseAi(e.currentTarget.checked)
+                  }}
+                />
+              }
+              rightSectionWidth={120}
+            />
+          </Group>
+          <Group flex={1}>
+            <DateInput
+              value={taskPreview.dueDate}
+              label="Due date"
+              placeholder="When is it due?"
+              onChange={(date) => {
+                setTaskPreview({
+                  ...taskPreview,
+                  dueDate: date,
+                })
+              }}
+              highlightToday
+              clearable
+              flex={1}
+            />
+            <TimeInput
+              label="Due time"
+              placeholder="What time is it due?"
+              onChange={(time) => {
+                setTaskPreview({
+                  ...taskPreview,
+                  dueTime: time.currentTarget.value,
+                })
+              }}
+              value={taskPreview.dueTime || ""}
+              flex={1}
+            />
+          </Group>
+          <Group>
+            <Select
+              label="Priority"
+              data={[
+                { value: "0", label: "Low" },
+                { value: "1", label: "Medium" },
+                { value: "2", label: "High" },
+                { value: "3", label: "Urgent" },
+              ]}
+              value={taskPreview.priority.toString()}
+              onChange={(value) => {
+                setTaskPreview({
+                  ...taskPreview,
+                  priority: value ? (parseInt(value) as 0 | 1 | 2 | 3) : 0,
+                })
+              }}
+            />
+          </Group>
 
-              <Text>
-                Priority{" "}
-                <Pill
-                  bg="var(--mantine-primary-color-filled)"
-                  c="var(--mantine-primary-color-contrast)"
-                  size="md"
-                >
-                  {["Low", "Medium", "High", "Urgent"][taskPreview.priority]}
-                </Pill>
-              </Text>
-            </Stack>
-          </Card>
           <Button
-            disabled={taskPreview.taskName == "" || taskPreview.error != "none"}
+            disabled={
+              taskPreview.taskName == "" ||
+              (taskPreview.error != "none" &&
+                taskPreview.error != "" &&
+                taskPreview.error != null)
+            }
             loading={loading}
             onClick={addTask}
           >
@@ -118,16 +151,16 @@ export function CreateTaskButton({
         onClick={() => {
           setTaskPreview({
             taskName: "",
-            dueDate: "",
-            dueTime: "",
+            dueDate: null,
+            dueTime: null,
             priority: 0,
             error: "",
-          });
-          open();
+          })
+          open()
         }}
       >
         New task
       </Button>
     </>
-  );
+  )
 }

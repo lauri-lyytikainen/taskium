@@ -1,11 +1,11 @@
-import { notifications } from "@mantine/notifications";
+import { notifications } from "@mantine/notifications"
 
 export function errorNotification(message: string) {
   notifications.show({
     title: "Error",
     message,
     color: "red",
-  });
+  })
 }
 
 export function successNotification(message: string) {
@@ -13,5 +13,5 @@ export function successNotification(message: string) {
     title: "Success",
     message,
     color: "green",
-  });
+  })
 }

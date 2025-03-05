@@ -1,22 +1,22 @@
-"use server";
+"use server"
 
-import { Button, Container, Group, Title, Box } from "@mantine/core";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { UserButton } from "./UserButton";
-import Image from "next/image";
+import { Button, Container, Group, Title, Box } from "@mantine/core"
+import { createClient } from "@/utils/supabase/server"
+import { redirect } from "next/navigation"
+import Link from "next/link"
+import { UserButton } from "./UserButton"
+import Image from "next/image"
 
 export async function Navbar() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getUser();
-  const user = data.user;
+  const supabase = await createClient()
+  const { data } = await supabase.auth.getUser()
+  const user = data.user
 
   async function signOut() {
-    "use server";
-    const supabase = await createClient();
-    await supabase.auth.signOut();
-    redirect("/");
+    "use server"
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    redirect("/")
   }
 
   return (
@@ -49,5 +49,5 @@ export async function Navbar() {
         </Group>
       </Container>
     </Box>
-  );
+  )
 }

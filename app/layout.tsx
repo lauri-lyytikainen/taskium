@@ -1,24 +1,25 @@
-import "@mantine/core/styles.css";
-import "@mantine/notifications/styles.css";
-import "@/style.css";
+import "@mantine/core/styles.css"
+import "@mantine/notifications/styles.css"
+import "@mantine/dates/styles.css"
+import "@/style.css"
 
-import React from "react";
+import React from "react"
 import {
   MantineProvider,
   ColorSchemeScript,
   mantineHtmlProps,
   Container,
-} from "@mantine/core";
-import { shadcnTheme } from "@/theme";
-import { shadcnCssVariableResolver } from "@/cssVariableResolver";
-import { GeistSans } from "geist/font/sans";
+} from "@mantine/core"
+import { shadcnTheme } from "@/theme"
+import { shadcnCssVariableResolver } from "@/cssVariableResolver"
+import { GeistSans } from "geist/font/sans"
 
-import { Notifications } from "@mantine/notifications";
+import { Notifications } from "@mantine/notifications"
 
 export const metadata = {
   title: "Taskium",
   description: "Something big coming soon!",
-};
+}
 
 export default function RootLayout({ children }: { children: any }) {
   return (
@@ -41,5 +42,5 @@ export default function RootLayout({ children }: { children: any }) {
         </MantineProvider>
       </body>
     </html>
-  );
+  )
 }

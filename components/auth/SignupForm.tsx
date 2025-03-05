@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Group,
@@ -12,25 +12,25 @@ import {
   Checkbox,
   Text,
   Center,
-} from "@mantine/core";
-import Link from "next/link";
-import { AuthCard } from "./AuthCard";
+} from "@mantine/core"
+import Link from "next/link"
+import { AuthCard } from "./AuthCard"
 import {
   IconBrandGoogle,
   IconBrandNotion,
   IconMail,
   IconPassword,
   IconUser,
-} from "@tabler/icons-react";
-import { useForm } from "@mantine/form";
-import { useState } from "react";
-import { signup } from "@/utils/supabase/authAction";
-import { errorNotification } from "../../utils/notifications/notifications";
-import Image from "next/image";
+} from "@tabler/icons-react"
+import { useForm } from "@mantine/form"
+import { useState } from "react"
+import { signup, loginGoogle } from "@/utils/supabase/authAction"
+import { errorNotification } from "../../utils/notifications/notifications"
+import Image from "next/image"
 
 export function SignupForm() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("")
   const form = useForm({
     mode: "uncontrolled",
     onSubmitPreventDefault: "always",
@@ -50,23 +50,36 @@ export function SignupForm() {
           : "Password is too short (minimum 6 characters)",
       acceptTerms: (value) => (value ? null : "You must accept terms"),
     },
-  });
+  })
 
   function submitForm(values: {
-    email: string;
-    password: string;
-    name: string;
+    email: string
+    password: string
+    name: string
   }) {
-    setIsLoading(true);
-    setEmail("");
+    setIsLoading(true)
+    setEmail("")
     signup(values.email, values.password, values.name).then((response) => {
       if (response.error) {
-        errorNotification("Signup failed");
-        return;
+        errorNotification("Signup failed")
+        return
       }
-      setIsLoading(false);
-      setEmail(values.email);
-    });
+      setIsLoading(false)
+      setEmail(values.email)
+    })
+  }
+
+  function loginWithGoogle() {
+    setIsLoading(true)
+    loginGoogle().then((response) => {
+      setIsLoading(false)
+      if (response.error) {
+        return
+      }
+      if (response.redirect) {
+        window.location.href = response.redirect
+      }
+    })
   }
 
   return (
@@ -115,6 +128,7 @@ export function SignupForm() {
               flex={1}
               variant="default"
               leftSection={<IconBrandGoogle size={20} />}
+              onClick={() => loginWithGoogle()}
             >
               Google
             </Button>
@@ -122,6 +136,7 @@ export function SignupForm() {
               flex={1}
               variant="default"
               leftSection={<IconBrandNotion size={20} />}
+              disabled
             >
               Notion
             </Button>
@@ -176,5 +191,5 @@ export function SignupForm() {
         </Stack>
       )}
     </AuthCard>
-  );
+  )
 }

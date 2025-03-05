@@ -1,40 +1,34 @@
-"use client";
-import {
-  AppShell,
-  Group,
-  Title,
-  ActionIcon,
-  Button,
-  Modal,
-  Stack,
-  Textarea,
-} from "@mantine/core";
-import { IconLayoutSidebar, IconMessage } from "@tabler/icons-react";
-import { useState } from "react";
+"use client"
+import { AppShell, Group, Title, ActionIcon } from "@mantine/core"
+import { IconLayoutSidebar, IconMessage } from "@tabler/icons-react"
+import { useState } from "react"
 
-import { AiChat } from "@/components/dashboard/AiChat/AiChat";
-import { useDisclosure } from "@mantine/hooks";
-import { Navbar } from "@/components/dashboard/Navbar/Navbar";
-import { TaskView } from "@/components/dashboard/TodayView/TaskView";
-import { UserButton } from "@/components/website/Navbar/UserButton";
-import { User } from "@supabase/supabase-js";
+import { AiChat } from "@/components/dashboard/AiChat/AiChat"
+import { useDisclosure } from "@mantine/hooks"
+import { Navbar } from "@/components/dashboard/Navbar/Navbar"
+import { ScheduledView } from "@/components/dashboard/Views/ScheduledView"
+import { UserButton } from "@/components/website/Navbar/UserButton"
+import { User } from "@supabase/supabase-js"
 
-import { CreateTaskButton } from "./Task/CreateTaskButton";
-import { useTodos } from "@/utils/todos/todos";
+import { CreateTaskButton } from "./Task/CreateTaskButton"
+import { useTodos } from "@/utils/todos/todos"
+import { TodayView } from "./Views/TodayView"
+import { TaskView } from "./Views/TaskView"
+import { CompletedView } from "./Views/CompletedView"
 
 interface DashboardProps {
-  user: User;
-  signOutFunction: () => void;
+  user: User
+  signOutFunction: () => void
 }
 
 export function Dashboard({ user, signOutFunction }: DashboardProps) {
-  const [navbarOpen, { toggle: toggleNavbar }] = useDisclosure();
-  const [chatOpen, { toggle: toggleChat }] = useDisclosure(true);
-  const { addTodo, todos, loading, error, toggleCompleted } = useTodos();
+  const [navbarOpen, { toggle: toggleNavbar }] = useDisclosure()
+  const [chatOpen, { toggle: toggleChat }] = useDisclosure(true)
+  const { loading, error, functions, todos } = useTodos()
 
   const [currentPage, setCurrentPage] = useState<
-    "tasks" | "calendar" | "completed"
-  >("tasks");
+    "today" | "tasks" | "scheduled" | "completed"
+  >("today")
 
   return (
     <AppShell
@@ -62,7 +56,7 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
           </Group>
 
           <Group>
-            <CreateTaskButton addTodo={addTodo} />
+            <CreateTaskButton addTodo={functions.addTodo} />
             <ActionIcon variant="subtle" onClick={toggleChat} mx="md">
               <IconMessage />
             </ActionIcon>
@@ -76,16 +70,38 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
       <AppShell.Main>
         {
           {
-            tasks: (
-              <TaskView
-                todos={todos}
+            today: (
+              <TodayView
                 loading={loading}
                 error={error}
-                toggleCompleted={toggleCompleted}
+                functions={functions}
+                todos={todos}
               />
             ),
-            calendar: <p>Calendar</p>,
-            completed: <p>Completed</p>,
+            tasks: (
+              <TaskView
+                loading={loading}
+                error={error}
+                functions={functions}
+                todos={todos}
+              />
+            ),
+            scheduled: (
+              <ScheduledView
+                loading={loading}
+                error={error}
+                functions={functions}
+                todos={todos}
+              />
+            ),
+            completed: (
+              <CompletedView
+                loading={loading}
+                error={error}
+                functions={functions}
+                todos={todos}
+              />
+            ),
           }[currentPage]
         }
       </AppShell.Main>
@@ -93,5 +109,5 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
         <AiChat />
       </AppShell.Aside>
     </AppShell>
-  );
+  )
 }

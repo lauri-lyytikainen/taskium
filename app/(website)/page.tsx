@@ -7,9 +7,9 @@ import {
   Text,
   Title,
   Avatar,
-} from "@mantine/core";
-import Link from "next/link";
+} from "@mantine/core"
+import Link from "next/link"
 
 export default function Page() {
-  return;
+  return
 }

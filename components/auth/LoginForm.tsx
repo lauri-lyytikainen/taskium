@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Group,
@@ -10,22 +10,22 @@ import {
   PasswordInput,
   LoadingOverlay,
   Center,
-} from "@mantine/core";
-import { AuthCard } from "./AuthCard";
-import Image from "next/image";
+} from "@mantine/core"
+import { AuthCard } from "./AuthCard"
+import Image from "next/image"
 import {
   IconBrandGoogle,
   IconBrandNotion,
   IconMail,
   IconPassword,
-} from "@tabler/icons-react";
-import { useForm } from "@mantine/form";
-import { useState } from "react";
-import { login } from "@/utils/supabase/authAction";
-import Link from "next/link";
+} from "@tabler/icons-react"
+import { useForm } from "@mantine/form"
+import { useState } from "react"
+import { login, loginGoogle } from "@/utils/supabase/authAction"
+import Link from "next/link"
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm({
     mode: "uncontrolled",
     onSubmitPreventDefault: "always",
@@ -42,21 +42,33 @@ export function LoginForm() {
           ? null
           : "Password is too short (minimum 6 characters)",
     },
-  });
+  })
 
   function submitForm(values: { email: string; password: string }) {
-    setIsLoading(true);
+    setIsLoading(true)
     login(values.email, values.password).then((response) => {
-      console.log(response);
       if (response.error) {
         form.setErrors({
           email: "Invalid credentials",
           password: "Invalid credentials",
-        });
-        setIsLoading(false);
-        return;
+        })
+        setIsLoading(false)
+        return
       }
-    });
+    })
+  }
+
+  function loginWithGoogle() {
+    setIsLoading(true)
+    loginGoogle().then((response) => {
+      setIsLoading(false)
+      if (response.error) {
+        return
+      }
+      if (response.redirect) {
+        window.location.href = response.redirect
+      }
+    })
   }
 
   return (
@@ -83,6 +95,7 @@ export function LoginForm() {
             flex={1}
             variant="default"
             leftSection={<IconBrandGoogle size={20} />}
+            onClick={() => loginWithGoogle()}
           >
             Google
           </Button>
@@ -90,6 +103,7 @@ export function LoginForm() {
             flex={1}
             variant="default"
             leftSection={<IconBrandNotion size={20} />}
+            disabled
           >
             Notion
           </Button>
@@ -125,5 +139,5 @@ export function LoginForm() {
         </form>
       </Stack>
     </AuthCard>
-  );
+  )
 }

@@ -1,56 +1,56 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import {
   Button,
   PasswordInput,
   Title,
   LoadingOverlay,
   Text,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
+} from "@mantine/core"
+import { useForm } from "@mantine/form"
 import {
   errorNotification,
   successNotification,
-} from "@/utils/notifications/notifications";
-import { codeLogin, updatePassword } from "@/utils/supabase/authAction";
-import { AuthCard } from "./AuthCard";
+} from "@/utils/notifications/notifications"
+import { codeLogin, updatePassword } from "@/utils/supabase/authAction"
+import { AuthCard } from "./AuthCard"
 
 export function PasswordUpdateForm() {
-  const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(true);
-  const [codeValid, setCodeValid] = useState(true);
+  const searchParams = useSearchParams()
+  const [isLoading, setIsLoading] = useState(true)
+  const [codeValid, setCodeValid] = useState(true)
 
   useEffect(() => {
-    const code = searchParams.get("code");
+    const code = searchParams.get("code")
     if (!code) {
-      setIsLoading(false);
-      setCodeValid(false);
+      setIsLoading(false)
+      setCodeValid(false)
       errorNotification(
         "Invalid password reset link, the link might have expired"
-      );
+      )
     } else {
       codeLogin(code).then((response) => {
         if (response.error) {
-          setIsLoading(false);
-          setCodeValid(false);
+          setIsLoading(false)
+          setCodeValid(false)
           errorNotification(
             "Invalid password reset link, the link might have expired"
-          );
+          )
         } else {
-          setIsLoading(false);
-          setCodeValid(true);
+          setIsLoading(false)
+          setCodeValid(true)
         }
-      });
+      })
     }
-  }, [searchParams]);
+  }, [searchParams])
 
-  const router = useRouter();
-  const [pwvisible, setPwVisible] = useState(false);
+  const router = useRouter()
+  const [pwvisible, setPwVisible] = useState(false)
 
   function togglePwVisibility() {
-    setPwVisible((visible) => !visible);
+    setPwVisible((visible) => !visible)
   }
 
   const form = useForm({
@@ -69,19 +69,19 @@ export function PasswordUpdateForm() {
       passwordRepeat: (value, values) =>
         value === values.password ? null : "Passwords do not match",
     },
-  });
+  })
 
   function submitForm(values: { password: string }) {
-    setIsLoading(true);
+    setIsLoading(true)
     updatePassword(values.password).then((reponse) => {
       if (reponse.error) {
-        errorNotification(reponse.error.message);
-        setIsLoading(false);
-        return;
+        errorNotification(reponse.error.message)
+        setIsLoading(false)
+        return
       }
-      successNotification("Password updated successfully");
-      router.push("/");
-    });
+      successNotification("Password updated successfully")
+      router.push("/")
+    })
   }
 
   return (
@@ -133,5 +133,5 @@ export function PasswordUpdateForm() {
         </>
       )}
     </AuthCard>
-  );
+  )
 }

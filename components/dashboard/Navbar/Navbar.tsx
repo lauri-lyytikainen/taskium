@@ -1,16 +1,17 @@
-import { Stack, Button, Group, Title } from "@mantine/core";
+import { Stack, Button, Group, Title } from "@mantine/core"
 import {
   IconCalendarWeek,
   IconBolt,
   IconSquareCheck,
-} from "@tabler/icons-react";
-import Link from "next/link";
+  IconSun,
+} from "@tabler/icons-react"
+import Link from "next/link"
 
 interface NavBarProps {
   setPageFunction: React.Dispatch<
-    React.SetStateAction<"tasks" | "calendar" | "completed">
-  >;
-  currentPage: "tasks" | "calendar" | "completed";
+    React.SetStateAction<"today" | "tasks" | "scheduled" | "completed">
+  >
+  currentPage: "today" | "tasks" | "scheduled" | "completed"
 }
 
 function NavButton(
@@ -31,7 +32,7 @@ function NavButton(
         {title}
       </Group>
     </Button>
-  );
+  )
 }
 
 export function Navbar({ setPageFunction, currentPage }: NavBarProps) {
@@ -39,16 +40,22 @@ export function Navbar({ setPageFunction, currentPage }: NavBarProps) {
     <Stack gap="xs" mt="md">
       <Title order={3}>Your workspace</Title>
       {NavButton(
+        "Today",
+        <IconSun size="20" />,
+        () => setPageFunction("today"),
+        currentPage === "today"
+      )}
+      {NavButton(
         "Tasks",
         <IconBolt size="20" />,
         () => setPageFunction("tasks"),
         currentPage === "tasks"
       )}
       {NavButton(
-        "Calendar",
+        "Scheduled",
         <IconCalendarWeek size="20" />,
-        () => setPageFunction("calendar"),
-        currentPage === "calendar"
+        () => setPageFunction("scheduled"),
+        currentPage === "scheduled"
       )}
       {NavButton(
         "Completed",
@@ -57,5 +64,5 @@ export function Navbar({ setPageFunction, currentPage }: NavBarProps) {
         currentPage === "completed"
       )}
     </Stack>
-  );
+  )
 }
