@@ -1,6 +1,6 @@
 "use client"
-import { AppShell, Group, Title, ActionIcon } from "@mantine/core"
-import { IconLayoutSidebar, IconMessage } from "@tabler/icons-react"
+import { AppShell, Group, Title, ActionIcon, em } from "@mantine/core"
+import { IconLayoutSidebar, IconMessage, IconX } from "@tabler/icons-react"
 import { useState } from "react"
 
 import { AiChat } from "@/components/dashboard/AiChat/AiChat"
@@ -15,6 +15,7 @@ import { useTodos } from "@/utils/todos/todos"
 import { TodayView } from "./Views/TodayView"
 import { TaskView } from "./Views/TaskView"
 import { CompletedView } from "./Views/CompletedView"
+import { useMediaQuery } from "@mantine/hooks"
 
 interface DashboardProps {
   user: User
@@ -22,13 +23,22 @@ interface DashboardProps {
 }
 
 export function Dashboard({ user, signOutFunction }: DashboardProps) {
-  const [navbarOpen, { toggle: toggleNavbar }] = useDisclosure()
-  const [chatOpen, { toggle: toggleChat }] = useDisclosure(true)
+  const [navbarOpen, { toggle: toggleNavbar }] = useDisclosure(true)
+  const [chatOpen, { toggle: toggleChat }] = useDisclosure(false)
   const { loading, error, functions, todos } = useTodos()
+  const isMobile = useMediaQuery("(max-width: 40em)")
 
   const [currentPage, setCurrentPage] = useState<
     "today" | "tasks" | "scheduled" | "completed"
   >("today")
+
+  function setPage(page: "today" | "tasks" | "scheduled" | "completed") {
+    console.log(isMobile)
+    if (isMobile && navbarOpen) {
+      toggleNavbar()
+    }
+    setCurrentPage(page)
+  }
 
   return (
     <AppShell
@@ -36,19 +46,19 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
       navbar={{
         width: 300,
         breakpoint: "sm",
-        collapsed: { desktop: navbarOpen },
+        collapsed: { desktop: !navbarOpen, mobile: !navbarOpen },
       }}
       aside={{
         breakpoint: "sm",
         width: 300,
-        collapsed: { desktop: chatOpen },
+        collapsed: { desktop: !chatOpen, mobile: !chatOpen },
       }}
       header={{ height: 60 }}
       padding="md"
     >
       <AppShell.Header>
-        <Group justify="space-between" h="100%" p="0">
-          <Group h="100%" px="md">
+        <Group justify="space-between" h="100%" p="sm" align="center">
+          <Group h="100%">
             <ActionIcon onClick={toggleNavbar} variant="subtle">
               <IconLayoutSidebar />
             </ActionIcon>
@@ -57,15 +67,23 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
 
           <Group>
             <CreateTaskButton addTodo={functions.addTodo} />
-            <ActionIcon variant="subtle" onClick={toggleChat} mx="md">
+            <ActionIcon variant="subtle" onClick={toggleChat}>
               <IconMessage />
             </ActionIcon>
           </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="lg">
+        <ActionIcon
+          onClick={toggleNavbar}
+          variant="subtle"
+          mb="md"
+          hiddenFrom="sm"
+        >
+          <IconX />
+        </ActionIcon>
         <UserButton user={user} signOutFunction={signOutFunction} />
-        <Navbar setPageFunction={setCurrentPage} currentPage={currentPage} />
+        <Navbar setPageFunction={setPage} currentPage={currentPage} />
       </AppShell.Navbar>
       <AppShell.Main>
         {
@@ -106,6 +124,14 @@ export function Dashboard({ user, signOutFunction }: DashboardProps) {
         }
       </AppShell.Main>
       <AppShell.Aside p="md">
+        <ActionIcon
+          onClick={toggleChat}
+          variant="subtle"
+          mb="md"
+          hiddenFrom="sm"
+        >
+          <IconX />
+        </ActionIcon>
         <AiChat />
       </AppShell.Aside>
     </AppShell>

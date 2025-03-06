@@ -9,9 +9,6 @@ import {
   Stack,
   Textarea,
   Text,
-  Pill,
-  LoadingOverlay,
-  TextInput,
   Group,
   Select,
   Switch,
@@ -20,7 +17,6 @@ import {
 import { useState } from "react"
 import { useDebouncedCallback } from "@mantine/hooks"
 import { TaskPreview } from "@/types/types"
-import { getFormattedDateToday, getFormattedDayString } from "@/utils/time/time"
 import { DateInput, TimeInput } from "@mantine/dates"
 
 export function CreateTaskButton({
@@ -31,7 +27,6 @@ export function CreateTaskButton({
   const [taskModalOpen, { open, close }] = useDisclosure(false)
   const [loading, setLoading] = useState(false)
   const [useAi, setUseAi] = useState(false)
-  const [currentDate] = useState(getFormattedDateToday())
   const [taskPreview, setTaskPreview] = useState<TaskPreview>({
     taskName: "",
     dueDate: null,
@@ -83,6 +78,7 @@ export function CreateTaskButton({
                 />
               }
               rightSectionWidth={120}
+              autoFocus
             />
             {useAi && (
               <>
@@ -171,7 +167,12 @@ export function CreateTaskButton({
           open()
         }}
       >
-        New task
+        <Text fw="600" visibleFrom="sm">
+          New task
+        </Text>
+        <Text hiddenFrom="sm" fw="600">
+          New
+        </Text>
       </Button>
     </>
   )

@@ -8,9 +8,7 @@ import {
 import Link from "next/link"
 
 interface NavBarProps {
-  setPageFunction: React.Dispatch<
-    React.SetStateAction<"today" | "tasks" | "scheduled" | "completed">
-  >
+  setPageFunction: (page: "today" | "tasks" | "scheduled" | "completed") => void
   currentPage: "today" | "tasks" | "scheduled" | "completed"
 }
 
